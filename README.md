@@ -71,7 +71,7 @@ functions:
 ```
 
 ## Code Generation
-Sandwich dynamically changes the handler src path, and generates code for you. A defition like this:
+Sandwich dynamically changes the handler src path, and generates code for you. This definition:
 ```yaml
 functions:
   protected:
@@ -86,7 +86,7 @@ functions:
         pipe: true
 ```
 
-Would Generate:
+Generates this code:
 ```javascript
 const before = require('../lambdas/wrapped/authenticate').default;
 const handler = require('../lambdas/wrapped/handler').default;
@@ -108,5 +108,10 @@ Running the order command will fulfill your serverless lambda generation and out
 $ npx serverless sandwich order
 ```
 
+## Plugin Interoperability
+As a result of code being generated dynamically, the `serverless-plugin-sandwich` needs to be declared before transpiler or build plugins. 
+
 ## Get Involved
 Looking to add support for Python or other runtimes, if you would like to get involved open an issues. 
+
+_Serverless V1.35.+_
