@@ -29,21 +29,21 @@ The function will be called inline, and not be tied to the original handler code
 
 ```yaml
 functions:
-    handler: src/original.default
-    sandwich:
-        before:
-            handler: src/runFirst.default
-            inline: true
+  handler: src/original.default
+  sandwich:
+    before:
+      handler: src/runFirst.default
+      inline: true
 ```
 
 Shorthand notation defaults to inline, and is declared the following way. 
 
 ```yaml
 functions:
-    handler: src/original.default
-    sandwich:
-        before: src/runFirst.default
-        after: src/runAfter.default
+  handler: src/original.default
+  sandwich:
+    before: src/runFirst.default
+    after: src/runAfter.default
 ```
 
 ##### `pipe`
@@ -51,11 +51,11 @@ The previous function pipes its output to the next function. Note, only one argu
 
 ```yaml
 functions:
-    handler: src/original.default
-    sandwich:
-        before:
-            handler: src/extractData.default
-            pipe: true
+  handler: src/original.default
+  sandwich:
+    before:
+      handler: src/extractData.default
+      pipe: true
 ```
 
 ##### `wrap`
@@ -63,27 +63,27 @@ Higher-order-functions, that curry another function, can be useful for validatin
 
 ```yaml
 functions:
-    handler: src/original.default
-    sandwich:
-        before:
-            handler: src/extractData.default
-            wrap: true
+  handler: src/original.default
+  sandwich:
+    before:
+      handler: src/extractData.default
+      wrap: true
 ```
 
 ## Code Generation
 Sandwich dynamically changes the handler src path, and generates code for you. A defition like this:
 ```yaml
 functions:
-    protected:
-        handler: lambdas/wrapped/handler.default
-            timeout: 30
-            sandwich:
-            before: 
-                handler: lambdas/wrapped/authenticate.default
-                wrap: true
-            after: 
-                handler: lambdas/wrapped/apiResponse.default
-                pipe: true
+  protected:
+    handler: lambdas/wrapped/handler.default
+    timeout: 30
+    sandwich:
+      before: 
+        handler: lambdas/wrapped/authenticate.default
+        wrap: true
+      after: 
+        handler: lambdas/wrapped/apiResponse.default
+        pipe: true
 ```
 
 Would Generate:
