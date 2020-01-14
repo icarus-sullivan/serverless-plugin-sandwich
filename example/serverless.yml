@@ -18,9 +18,9 @@ functions:
     timeout: 10
     sandwich:
       before: 
-        handler: lambdas/ordered/pre.default
+        handler: lambdas/ordered/before.default
       after: 
-        handler: lambdas/ordered/post.default
+        handler: lambdas/ordered/after.default
         wrap: true
         
 
@@ -29,10 +29,10 @@ functions:
     timeout: 30
     sandwich:
       before: 
-        handler: lambdas/wrapped/pre.default
+        handler: lambdas/wrapped/authenticate.default
         wrap: true
       after: 
-        handler: lambdas/wrapped/post.default
+        handler: lambdas/wrapped/apiResponse.default
         pipe: true
 
 plugins:

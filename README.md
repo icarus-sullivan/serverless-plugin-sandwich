@@ -1,5 +1,7 @@
 ![npm downloads total](https://img.shields.io/npm/dt/serverless-plugin-sandwich.svg) ![npm version](https://img.shields.io/npm/v/serverless-plugin-sandwich.svg) ![npm license](https://img.shields.io/npm/l/serverless-plugin-sandwich.svg)
 
+![header](https://raw.githubusercontent.com/icarus-sullivan/serverless-plugin-sandwich/master/header.png)
+
 # Installation
 
 ```sh
@@ -23,7 +25,7 @@ plugins:
 
 ## Custom Declaration
 ##### `inline`
-The function will be called inline, and not be tied to the original handler code. However, proper error handling needs to be taking into consideratioin.
+The function will be called inline, and not be tied to the original handler code. However, proper error handling needs to be taken into consideratioin.
 
 ```yaml
 functions:
@@ -57,7 +59,7 @@ functions:
 ```
 
 ##### `wrap`
-Higher-order-functions that curry another function can be useful for validating and extracting Authorization tokens. It could also be used for logging or other boilerplate code that needs to be done before a lambda is called. 
+Higher-order-functions, that curry another function, can be useful for validating and extracting Authorization tokens. It could also be used for logging, or other boilerplate code that needs to be done before a lambda is called. 
 
 ```yaml
 functions:
@@ -68,20 +70,34 @@ functions:
             wrap: true
 ```
 
-Example Wrapper:
+## Code Generation
+Sandwich dynamically changes the handler src path, and generates code for you. A defition like this:
+```yaml
+functions:
+    protected:
+        handler: lambdas/wrapped/handler.default
+            timeout: 30
+            sandwich:
+            before: 
+                handler: lambdas/wrapped/authenticate.default
+                wrap: true
+            after: 
+                handler: lambdas/wrapped/apiResponse.default
+                pipe: true
+```
+
+Would Generate:
 ```javascript
-module.exports.default = (fn) => async (event, context) => {
-    try {
-        const token = event.headers.Authorization.replace(/bearer /gi, '');
-        const decoded = jwt.verifytoken, process.env.SALT);
-        return await fn(decoded, context);
-    } catch (e) {
-        return {
-            statusCode: '401',
-            body: 'Unauthorized',
-        };
-    }
-}
+const before = require('../lambdas/wrapped/authenticate').default;
+const handler = require('../lambdas/wrapped/handler').default;
+const after = require('../lambdas/wrapped/apiResponse').default;
+
+module.exports.default = async (event, context) => {
+
+  const response = await before(async (e, c) => after(await handler(e, c)))(event, context);
+
+  return response;
+};
 ```
 
 ## Commands
@@ -92,3 +108,5 @@ Running the order command will fulfill your serverless lambda generation and out
 $ npx serverless sandwich order
 ```
 
+## Get Involved
+Looking to add support for Python or other runtimes, if you would like to get involved open an issues. 
