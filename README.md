@@ -18,7 +18,7 @@ In your projects serverless file, add `serverless-plugin-sandwich` to the list o
 
 ```yaml
 plugins:
-  - serverless-plugin-modularize
+  - serverless-plugin-sandwich
 ```
 
 ## Custom Declaration
