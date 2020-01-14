@@ -1,0 +1,11 @@
+# Node Modules
+node_modules
+
+# coverage
+coverage
+
+# Ignore unwanted locks
+package-lock.json
+
+# Ignore VS Code workspace
+*.code-workspace

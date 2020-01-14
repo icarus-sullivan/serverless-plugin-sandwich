@@ -1,0 +1,40 @@
+service: sandwich-example
+
+custom:       
+  webpack:
+    includeModules: false
+    packager: 'yarn'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-west-2 
+  package:
+    individually: true
+
+functions:
+  hello:
+    handler: lambdas/ordered/handler.default
+    timeout: 10
+    sandwich:
+      before: 
+        handler: lambdas/ordered/pre.default
+      after: 
+        handler: lambdas/ordered/post.default
+        wrap: true
+        
+
+  protected:
+    handler: lambdas/wrapped/handler.default
+    timeout: 30
+    sandwich:
+      before: 
+        handler: lambdas/wrapped/pre.default
+        wrap: true
+      after: 
+        handler: lambdas/wrapped/post.default
+        pipe: true
+
+plugins:
+  - serverless-plugin-sandwich
+  - serverless-webpack

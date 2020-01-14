@@ -1,0 +1,22 @@
+{
+  "name": "serverless-plugin-sandwich-example",
+  "version": "1.0.0",
+  "description": "Showing how serverless-plugin-sandwich can be used",
+  "scripts": {
+    "sls": "npx serverless",
+    "build": "rm -rf node_modules/serverless-plugin-sandwich && yarn add -D ../"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/preset-env": "^7.2.0",
+    "babel-loader": "^8.0.4",
+    "serverless": "^1.35.0",
+    "serverless-plugin-sandwich": "../",
+    "serverless-webpack": "^5.2.0",
+    "webpack": "^4.28.0",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1"
+  }
+}
