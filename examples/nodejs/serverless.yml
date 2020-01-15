@@ -1,9 +1,4 @@
-service: sandwich-example
-
-custom:       
-  webpack:
-    includeModules: false
-    packager: 'yarn'
+service: sandwich-example-node
 
 provider:
   name: aws
@@ -37,4 +32,3 @@ functions:
 
 plugins:
   - serverless-plugin-sandwich
-  - serverless-webpack

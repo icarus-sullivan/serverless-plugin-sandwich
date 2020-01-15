@@ -1,0 +1,16 @@
+service: sandwich-example-python
+
+plugins:
+  - serverless-plugin-sandwich
+
+provider:
+  name: aws
+  runtime: python3.8
+
+functions:
+  hello:
+    handler: lambdas/ordered/handler.main
+    timeout: 10
+    sandwich:
+      before: 
+        handler: lambdas/ordered/before.main

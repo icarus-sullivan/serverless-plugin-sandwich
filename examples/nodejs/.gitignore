@@ -1,0 +1,9 @@
+.serverless
+/node_modules/
+
+sandwich
+
+# Ignore lock files
+package-lock.json
+yarn.lock
+yarn-error.lock
