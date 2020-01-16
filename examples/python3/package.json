@@ -1,0 +1,14 @@
+{
+  "name": "sandwich-example-python",
+  "version": "1.0.0",
+  "description": "Showing how serverless-plugin-sandwich can be used",
+  "scripts": {
+    "sls": "npx serverless",
+    "build": "pip install -t vendored/ -r requirements.txt",
+    "local": "yarn link serverless-plugin-sandwich",
+    "prepare": "yarn build && yarn local"
+  },
+  "devDependencies": {
+    "serverless": "^1.35.0"
+  }
+}

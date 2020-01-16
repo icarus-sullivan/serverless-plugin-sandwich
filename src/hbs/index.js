@@ -1,13 +1,15 @@
-const node = require('./node');
-
 const NODE_RUNTIME = /node.*/gi;
-// eslint-disable-next-line no-unused-vars
 const PYTHON_RUNTIME = /python.*/gi;
 
 const createTemplateEngine = (runtime) => {
   if (NODE_RUNTIME.test(runtime)) {
-    return node;
+    return require('./node');
   }
+
+  // WIP
+  // if (PYTHON_RUNTIME.test(runtime)) {
+  //   return require('./python');
+  // }
 
   throw new Error('Unsupported Runtime', runtime);
 };

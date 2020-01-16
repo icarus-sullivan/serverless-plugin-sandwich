@@ -1,9 +1,4 @@
-service: sandwich-example
-
-custom:       
-  webpack:
-    includeModules: false
-    packager: 'yarn'
+service: sandwich-example-node
 
 provider:
   name: aws
@@ -17,11 +12,6 @@ functions:
     handler: lambdas/ordered/handler.default
     timeout: 10
     sandwich:
-      before: 
-        handler: lambdas/ordered/before.default
-      after: 
-        handler: lambdas/ordered/after.default
-        wrap: true
         
 
   protected:
@@ -37,4 +27,3 @@ functions:
 
 plugins:
   - serverless-plugin-sandwich
-  - serverless-webpack
