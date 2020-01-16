@@ -12,7 +12,10 @@ functions:
     handler: lambdas/ordered/handler.default
     timeout: 10
     sandwich:
-        
+      before: lambdas/ordered/before.default
+      after: 
+        handler: lambdas/ordered/after.default
+        pipe: true
 
   protected:
     handler: lambdas/wrapped/handler.default

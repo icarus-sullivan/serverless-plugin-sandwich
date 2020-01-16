@@ -1,39 +1,26 @@
 const path = require('path');
-const handlebars = require('../base');
+const engine = require('../engine');
 
 const template = require('./templates');
 
-const resolve = (q) => {
-  if (!q) return undefined;
-  if (typeof q === 'string') {
-    const resolved = path.normalize(q).split('.');
-    return {
-      dir: resolved[0],
-      name: resolved[1],
-      inline: true,
-    };
-  }
-  const { handler, ...options } = q;
-  const resolved = path.normalize(handler).split('.');
-  return {
-    dir: resolved[0],
-    name: resolved[1],
-    ...options,
-    inline: !options.wrap && !options.pipe,
-  };
-};
-
-const createTemplate = ({ before, after, handler }) =>
-  template(handlebars, {
-    before: resolve(before),
-    after: resolve(after),
-    handler: resolve(handler),
-  });
-
-const createFilename = ({ buildDir, name }) =>
-  path.resolve(buildDir, `${name}.js`);
+const node = engine({
+  runtimeRegex: /node.*/gi,
+  suffix: 'js',
+  resolvePaths: (file) => path.normalize(file).split('.'),
+});
 
 module.exports = {
-  createFilename,
-  createTemplate,
+  ...node,
+  createTemplate: ({ before, after, handler }) => {
+    const resolved = {
+      before: node.resolve(before),
+      after: node.resolve(after),
+      handler: node.resolve(handler),
+    };
+
+    return node.compile(template, {
+      flow: node.createCodeFlowKey(resolved),
+      ...resolved,
+    });
+  },
 };

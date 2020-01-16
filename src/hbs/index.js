@@ -1,11 +1,11 @@
-const NODE_RUNTIME = /node.*/gi;
+const node = require('./node');
 const PYTHON_RUNTIME = /python.*/gi;
 
 const createTemplateEngine = (runtime) => {
-  if (NODE_RUNTIME.test(runtime)) {
-    return require('./node');
+  if (node.isRuntime(runtime)) {
+    return node;
   }
-
+  
   // WIP
   // if (PYTHON_RUNTIME.test(runtime)) {
   //   return require('./python');
