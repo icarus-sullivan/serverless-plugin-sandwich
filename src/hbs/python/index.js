@@ -1,9 +1,8 @@
 const path = require('path');
-const { compile } = require('../base');
+const handlebars = require('../base');
 
-const iterations = require('./iterations');
+const template = require('./templates');
 
-const WHITE_SPACE = /^\s+$/gm;
 const DIR_TO_DOT = /\//g;
 
 const resolve = (q) => {
@@ -27,11 +26,11 @@ const resolve = (q) => {
 };
 
 const createTemplate = ({ before, after, handler }) =>
-  compile(iterations)({
+  template(handlebars, {
     before: resolve(before),
     after: resolve(after),
     handler: resolve(handler),
-  }).replace(WHITE_SPACE, '');
+  });
 
 const createFilename = ({ buildDir, name }) =>
   path.resolve(buildDir, `${name}.py`);

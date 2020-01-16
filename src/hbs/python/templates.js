@@ -1,4 +1,6 @@
-module.exports = `
+const WHITE_SPACE = /^\s+$/gm;
+
+const main = `
 import sys
 sys.path.append('../')
 {{#with before}}
@@ -57,4 +59,9 @@ async def default(event, context):
   {{/if}}
 
   return response
-`
+`;
+
+module.exports = (engine, context) =>
+  engine
+    .compile(main)(context)
+    .replace(WHITE_SPACE, '');

@@ -6,9 +6,10 @@ const createTemplateEngine = (runtime) => {
     return require('./node');
   }
 
-  if (PYTHON_RUNTIME.test(runtime)) {
-    return require('./python');
-  }
+  // WIP
+  // if (PYTHON_RUNTIME.test(runtime)) {
+  //   return require('./python');
+  // }
 
   throw new Error('Unsupported Runtime', runtime);
 };

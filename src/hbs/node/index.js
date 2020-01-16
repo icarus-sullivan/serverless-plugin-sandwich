@@ -1,9 +1,7 @@
 const path = require('path');
-const { compile } = require('../base');
+const handlebars = require('../base');
 
-const iterations = require('./iterations');
-
-const WHITE_SPACE = /^\s+$/gm;
+const template = require('./templates');
 
 const resolve = (q) => {
   if (!q) return undefined;
@@ -26,11 +24,11 @@ const resolve = (q) => {
 };
 
 const createTemplate = ({ before, after, handler }) =>
-  compile(iterations)({
+  template(handlebars, {
     before: resolve(before),
     after: resolve(after),
     handler: resolve(handler),
-  }).replace(WHITE_SPACE, '');
+  });
 
 const createFilename = ({ buildDir, name }) =>
   path.resolve(buildDir, `${name}.js`);
