@@ -1,6 +1,6 @@
 {
   "name": "serverless-plugin-sandwich",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Wrap, pipe or inline your lambdas with other defined functions",
   "repository": "https://github.com/icarus-sullivan/serverless-plugin-sandwich.git",
   "main": "src/index.js",
