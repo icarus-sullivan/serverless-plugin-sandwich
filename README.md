@@ -94,8 +94,8 @@ const after = require('../lambdas/wrapped/apiResponse').default;
 
 module.exports.default = async (event, context) => {
 
-  const response = await before(async (e, c) => after(await handler(e, c)))(event, context);
-
+  const response = await after(await before(handler)(event, context));
+  
   return response;
 };
 ```
