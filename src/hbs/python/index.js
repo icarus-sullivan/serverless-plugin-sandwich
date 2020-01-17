@@ -1,41 +1,31 @@
 const path = require('path');
-const handlebars = require('../base');
+const engine = require('../engine');
 
 const template = require('./templates');
 
 const DIR_TO_DOT = /\//g;
 
-const resolve = (q) => {
-  if (!q) return undefined;
-  if (typeof q === 'string') {
-    const resolved = path.normalize(q).split('.');
-    return {
-      dir: resolved[0].replace(DIR_TO_DOT, '.'),
-      name: resolved[1],
-      inline: true,
-    };
-  }
-  const { handler, ...options } = q;
-  const resolved = path.normalize(handler).split('.');
-  return {
-    dir: resolved[0].replace(DIR_TO_DOT, '.'),
-    name: resolved[1],
-    ...options,
-    inline: !options.wrap && !options.pipe,
-  };
-};
-
-const createTemplate = ({ before, after, handler }) =>
-  template(handlebars, {
-    before: resolve(before),
-    after: resolve(after),
-    handler: resolve(handler),
-  });
-
-const createFilename = ({ buildDir, name }) =>
-  path.resolve(buildDir, `${name}.py`);
+const python = engine({
+  runtimeRegex: /python.*/gi,
+  suffix: 'py',
+  resolvePaths: (file) => {
+    const result = path.normalize(file).split('.');
+    return [result[0].replace(DIR_TO_DOT, '.'), result[1]];
+  },
+});
 
 module.exports = {
-  createFilename,
-  createTemplate,
+  ...python,
+  createTemplate: ({ before, after, handler }) => {
+    const resolved = {
+      before: python.resolve(before),
+      after: python.resolve(after),
+      handler: python.resolve(handler),
+    };
+
+    return python.compile(template, {
+      flow: python.createCodeFlowKey(resolved),
+      ...resolved,
+    });
+  },
 };

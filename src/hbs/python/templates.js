@@ -1,6 +1,4 @@
-const WHITE_SPACE = /^\s+$/gm;
-
-const main = `
+module.exports = `
 import sys
 sys.path.append('../')
 {{#with before}}
@@ -13,55 +11,78 @@ from {{dir}} import {{name}} as handler
 from {{dir}} import {{name}} as after
 {{/with}}
 
-async def default(event, context):
-  {{#if before.inline}}
-  await before(event, context)
-  {{/if}}
+def default(event, context):
+  {{#flow 'inline-na'}}
+  before(event, context)
+  response = handler(event, context)
+  {{/flow}}
 
-  {{#if (and after.pipe before.pipe)}}
-  response = await after(await handler(await before(event, context)))
-  {{/if}}
+  {{#flow 'inline-inline'}}
+  before(event, context)
+  response = handler(event, context)
+  after(event, context)
+  {{/flow}}
 
-  {{#if (and after.pipe before.wrap)}}
-  response = await before(async (e, c) => after(await handler(e, c)))(event, context)
-  {{/if}}
+  {{#flow 'inline-wrap'}}
+  before(event, context)
+  response = handler(after)(event, context)
+  {{/flow}}
 
-  {{#if (and after.pipe before.inline)}}
-  resonse = await after(await handler(event, context))
-  {{/if}}
+  {{#flow 'inline-pipe'}}
+  before(event, context)
+  response = after(handler(event, context))
+  {{/flow}}
 
-  {{#if (and after.wrap before.wrap)}}
-  response = await before(await handler(after))(event, context)
-  {{/if}}
+  {{#flow 'pipe-na'}}
+  response = handler(before(event, context))
+  {{/flow}}
 
-  {{#if (and after.wrap before.pipe)}}
-  response = await after(async (e, c) => handler(await before(e, c)))(event, context)
-  {{/if}}
+  {{#flow 'pipe-inline'}}
+  response = handler(before(event, context))
+  after(event, context)
+  {{/flow}}
 
-  {{#if (and after.wrap before.inline)}}
-  response = await after(await handler(event, context))
-  {{/if}}
+  {{#flow 'pipe-pipe'}}
+  response = after(handler(before(event, context)))
+  {{/flow}}
 
-  {{#if (and after.inline before.inline )}}
-  response = await handler(event, context)
-  {{/if}}
+  {{#flow 'pipe-wrap'}}
+  response = handler(after)(before(event, context))
+  {{/flow}}
 
-  {{#if (and after.inline before.wrap)}}
-  response = await before(handler)(event, context) 
-  {{/if}}
+  {{#flow 'na-na'}}
+  response = handler(event, context)
+  {{/flow}}
 
-  {{#if (and after.inline before.pipe)}}
-  response = await handler(await before(event, context))
-  {{/if}}
+  {{#flow 'na-inline'}}
+  response = handler(event, context)
+  after(event, context)
+  {{/flow}}
 
-  {{#if after.inline}}
-  await after(event, context)
-  {{/if}}
+  {{#flow 'na-pipe'}}
+  response = after(handler(event, context))
+  {{/flow}}
+
+  {{#flow 'na-wrap'}}
+  response = handler(after)(event, context)
+  {{/flow}}
+
+  {{#flow 'wrap-na'}}
+  response = before(handler)(event, context)
+  {{/flow}}
+
+  {{#flow 'wrap-inline'}}
+  response = before(handler)(event, context)
+  after(event, context)
+  {{/flow}}
+
+  {{#flow 'wrap-pipe'}}
+  response = after(before(handler)(event, context))
+  {{/flow}}
+
+  {{#flow 'wrap-wrap'}}
+  response = before(handler(after))(event, context)
+  {{/flow}}
 
   return response
 `;
-
-module.exports = (engine, context) =>
-  engine
-    .compile(main)(context)
-    .replace(WHITE_SPACE, '');

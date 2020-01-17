@@ -1,15 +1,14 @@
 const node = require('./node');
-const PYTHON_RUNTIME = /python.*/gi;
+const python = require('./python');
 
 const createTemplateEngine = (runtime) => {
   if (node.isRuntime(runtime)) {
     return node;
   }
-  
-  // WIP
-  // if (PYTHON_RUNTIME.test(runtime)) {
-  //   return require('./python');
-  // }
+
+  if (python.isRuntime(runtime)) {
+    return python;
+  }
 
   throw new Error('Unsupported Runtime', runtime);
 };
