@@ -36,7 +36,6 @@ class PipelinePlugin {
       'before:package:createDeploymentArtifacts': requestOrders,
       'before:deploy:function:packageFunction': requestOrders,
       'before:invoke:local:invoke': requestOrders,
-      'before:deploy:deploy': requestOrders,
       'before:run:run': requestOrders,
       [`${PLUGIN}:order:order`]: pipe(
         bPromise.bind(this),
@@ -84,7 +83,7 @@ class PipelinePlugin {
   }
 
   cleanUp() {
-    fs.rmdirSync(BUILD_DIR);
+    fs.removeSync(BUILD_DIR);
   }
 }
 

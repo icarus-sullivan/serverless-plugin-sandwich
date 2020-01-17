@@ -20,13 +20,13 @@ functions:
         handler: lambdas/ordered/after.default
         pipe: true
 
-  # protected:
-  #   handler: lambdas/wrapped/handler.default
-  #   timeout: 30
-  #   sandwich:
-  #     before: 
-  #       handler: lambdas/wrapped/authenticate.default
-  #       wrap: true
-  #     after: 
-  #       handler: lambdas/wrapped/apiResponse.default
-  #       pipe: true
+  protected:
+    handler: lambdas/wrapped/handler.default
+    timeout: 30
+    sandwich:
+      before: 
+        handler: lambdas/wrapped/authenticate.default
+        wrap: true
+      after: 
+        handler: lambdas/wrapped/apiResponse.default
+        pipe: true
