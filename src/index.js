@@ -36,6 +36,7 @@ class PipelinePlugin {
       'before:package:createDeploymentArtifacts': requestOrders,
       'before:deploy:function:packageFunction': requestOrders,
       'before:invoke:local:invoke': requestOrders,
+      'before:deploy:deploy': requestOrders,
       'before:run:run': requestOrders,
       [`${PLUGIN}:order:order`]: pipe(
         bPromise.bind(this),
@@ -65,6 +66,8 @@ class PipelinePlugin {
     if (!orders || orders.length === 0) {
       return;
     }
+
+    console.log('createSandwiches');
     fs.mkdirSync(BUILD_DIR, { recursive: true });
 
     const { createFilename, createTemplate } = this.templateEngine;
@@ -72,12 +75,11 @@ class PipelinePlugin {
       const { name, ...config } = order;
       const filename = createFilename({ buildDir: BUILD_DIR, name });
       const content = createTemplate(config);
+      const newHandler = path.join(BUILD_DIR, `${name}.default`);
 
       fs.writeFileSync(filename, content);
-      this.serverless.service.functions[name].handler = path.join(
-        BUILD_DIR,
-        `${name}.default`,
-      );
+      this.serverless.cli.consoleLog(`[${name}] - ${newHandler}`);
+      this.serverless.service.functions[name].handler = newHandler;
     }
   }
 

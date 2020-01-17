@@ -1,11 +1,14 @@
 service: sandwich-example-node
 
+plugins:
+  - serverless-plugin-sandwich
+ 
+package:
+  individually: true
+
 provider:
   name: aws
   runtime: nodejs12.x
-  region: us-west-2 
-  package:
-    individually: true
 
 functions:
   hello:
@@ -17,16 +20,13 @@ functions:
         handler: lambdas/ordered/after.default
         pipe: true
 
-  protected:
-    handler: lambdas/wrapped/handler.default
-    timeout: 30
-    sandwich:
-      before: 
-        handler: lambdas/wrapped/authenticate.default
-        wrap: true
-      after: 
-        handler: lambdas/wrapped/apiResponse.default
-        pipe: true
-
-plugins:
-  - serverless-plugin-sandwich
+  # protected:
+  #   handler: lambdas/wrapped/handler.default
+  #   timeout: 30
+  #   sandwich:
+  #     before: 
+  #       handler: lambdas/wrapped/authenticate.default
+  #       wrap: true
+  #     after: 
+  #       handler: lambdas/wrapped/apiResponse.default
+  #       pipe: true
