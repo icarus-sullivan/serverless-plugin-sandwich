@@ -112,6 +112,6 @@ $ npx serverless sandwich order
 As a result of code being generated dynamically, the `serverless-plugin-sandwich` needs to be declared before transpiler or build plugins. 
 
 ## Get Involved
-Looking to add support for Python or other runtimes, if you would like to get involved open an issues. 
+Looking to add full support for Python or other runtimes, if you would like to get involved open an issues. 
 
 _Serverless V1.35.+_
